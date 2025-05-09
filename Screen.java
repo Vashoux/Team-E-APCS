@@ -1,12 +1,17 @@
 /* Screen class - a high level class that handles background screens & millisecond timing
  * Has a World Subclass
  * Author: Joel Bianchi & Carey Jiang
- * Last Edit: 5/28/24
- * Ability to reset the timer for a particular screen
- * Added moveable background
+ * Last Edit: 5/8/25
+ * Updated to Java version
  */
 
-public class Screen {
+
+import processing.core.PApplet;
+import processing.core.PImage;
+
+public class Screen{
+
+    PApplet p;
 
     //------------------ SCREEN FIELDS --------------------//
     private String screenName;
@@ -19,25 +24,36 @@ public class Screen {
 
     //------------------ SCREEN CONSTRUCTORS --------------------//
 
-    //Screen Constructor #1: For background images that move (Coded as a Sprite, not a Processing background PImage)
-    public Screen(String screenName, String movingBgFile, float scale, float x, float y) {
-        this.isMoveable = true;
-        this.setName(screenName);
-        mbg = new Sprite(movingBgFile, scale, x, y);
-        
-        // this.x = x;
-        // this.y = y;
-        startTime = getTotalTime();
-    }
-
-    //Screen Constructor #2: Stationary background image
-    public Screen(String screenName, PImage bg) {
+    //Screen Constructor #1: Stationary background image
+    public Screen(PApplet p, String screenName, PImage bg) {
+        this.p = p;
         this.isMoveable = false;
         this.setName(screenName);
         if(bg != null) {
             this.setBg(bg);
         }
+        System.out.println("bg of " + screenName + " Screen: " + Util.toStringPImage(bg));
+        startTime = getTotalTime(); //?
     }
+
+    //Screen Constructor #2: For background images that move - Takes String (Coded as a Sprite, not a Processing background PImage)
+    public Screen(PApplet p, String screenName, String movingBgFile, float scale, float x, float y) {
+        this.p = p;
+        this.isMoveable = true;
+        this.setName(screenName);
+        mbg = new Sprite(p, movingBgFile, scale, x, y);
+        startTime = getTotalTime();
+    }
+
+    //Screen Constructor #3: For background images that move - Takes PImage (Coded as a Sprite, not a Processing background PImage)
+    public Screen(PApplet p, String screenName, PImage movingBg, float scale, float x, float y) {
+        this.p = p;
+        this.isMoveable = true;
+        this.setName(screenName);
+        mbg = new Sprite(p, movingBg, scale, x, y);
+        startTime = getTotalTime();
+    }
+
 
     //------------------ ACCESSORS & MUTATORS --------------------//
     public void setName(String screenName){
@@ -50,17 +66,25 @@ public class Screen {
     public void setBg(PImage bg){
         if(!isMoveable){
             this.bg = bg;
-            //background(bg);
+            //p.background(bg);
         }
     }
-    public PImage getBg(){
+    public PImage getBgImage(){
+        
+        if(isMoveable){
+            return mbg.getImage();
+        }
         return bg;
+    }
+
+    public boolean getIsMoveable(){
+        return isMoveable;
     }
 
 
     //------------------ SCREEN MOVING METHODS --------------------//
 
-    //move the background image in the X direction
+    //move the background image in the X & Y directions
     public void moveBgXY(float speedX, float speedY){
         if(isMoveable){
             mbg.move(speedX, speedY);
@@ -87,7 +111,6 @@ public class Screen {
     public void show(){
         if(isMoveable){
             mbg.show();
-            //System.out.println("Showing mbg");
         }
     }
 
@@ -96,10 +119,10 @@ public class Screen {
     //------------------ SCREEN TIME METHODS --------------------//
 
     public long getTotalTime(){
-        return millis();  //milliseconds world
+        return p.millis();  //milliseconds world
     }
     public long getScreenTime(){
-        return millis() - startTime;  //milliseconds world
+        return p.millis() - startTime;  //milliseconds world
     }
     public long getTimeSince(long lastCheck){
         return getScreenTime() - lastCheck;
@@ -121,7 +144,6 @@ public class Screen {
     public void resetTime(){
         startTime = getTotalTime();
     }
-
 
 
     public String toString(){

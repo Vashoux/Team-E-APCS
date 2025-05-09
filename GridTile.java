@@ -2,29 +2,34 @@
  * GridTiles have distinguishable marks that will be printed out to the console for easy visualization of a 2D array
  * GridTiles can indicate if they have been "captured", colored, or are displaying an image
  * Authors: Joel Bianchi, Naomi Gaylor, Ezzeldin Moussa
- * Last Edit: 5/29/24
- * Functioning with Sprites and AnimatedSprites
+ * Last Edit: 5/8/25
+ * Updated to Java version
  */
 
-import java.awt.Color;
+import processing.core.PApplet;
+import processing.core.PImage;
+
 
 public class GridTile{
+
+  PApplet p;
   
   private GridLocation location;
   private PImage pi;
   private Sprite sprite;
   private boolean coveredPic;
-  private color fillColor;
-  final color defaultFillColor = #FFFFFF; //WHITE
-  private color outlineColor;
-  final color defaultOutlineColor = #000000; //BLACK
+  private int fillColor;
+  final int defaultFillColor = 0xFFFFFF; //WHITE #FFFFFF
+  private int outlineColor;
+  final int defaultOutlineColor =0x000000; //BLACK #000000
   private String mark;
   final private static String noMark = " ";
   private boolean isCaptured;
 
   //------------------GridTile Constructors ---------------//
   //GridTile constructor #1: Adds the specified String mark
-  public GridTile(String mark, GridLocation loc){
+  public GridTile(PApplet p, String mark, GridLocation loc){
+    this.p = p;
     this.mark = mark;
     location = loc;
     fillColor = defaultFillColor;
@@ -33,18 +38,18 @@ public class GridTile{
   }
   
   //GridTile constructor #2 which adds a mark, but no Location
-  public GridTile(String mark){
-    this(mark, null);
+  public GridTile(PApplet p, String mark){
+    this(p, mark, null);
   }
 
   //GridTile constructor #3 which adds a GridLocation, but no mark  
-  public GridTile(GridLocation loc){
-    this(noMark, loc);
+  public GridTile(PApplet p, GridLocation loc){
+    this(p, noMark, loc);
   }
 
   //Default GridTile constructor which puts an empty String mark in the GridTile
-  public GridTile(){
-    this(noMark, null);
+  public GridTile(PApplet p){
+    this(p, noMark, null);
   }
 
   //------------------Marking Methods ---------------//
@@ -127,9 +132,9 @@ public class GridTile{
 
   //------------------Capturing Tiles Methods ---------------//
   //method to "capture" a tile by changing its color
-  public void captureTile(color clr){
+  public void captureTile(int color){
     this.isCaptured = false;
-    this.fillColor = clr;
+    this.fillColor = color;
   }
 
   //method to "release" a tile by changing its color
@@ -146,20 +151,20 @@ public class GridTile{
 
   //------------------Coloring Tiles Methods ---------------//
   //method to change the color of the tile
-  public void setColor(color clr) {
-    this.fillColor = clr;
+  public void setColor(int color) {
+    this.fillColor = color;
   }
 
   //method to access the color of the tile
-  public color getColor() {
+  public int getColor() {
     return fillColor;
   }
 
-  public void setOutlineColor(color oclr){
-    this.outlineColor = oclr;
+  public void setOutlineColor(int outlineColor){
+    this.outlineColor = outlineColor;
   }
 
-  public color getOutlineColor(){
+  public int getOutlineColor(){
     return this.outlineColor;
   }
 

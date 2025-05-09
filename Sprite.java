@@ -2,14 +2,20 @@
  * Inspired by Daniel Shiffman's p5js Animated Sprite tutorial
  * Note: Picture coordinate origina at top, left corner
  * Author: Joel Bianchi
- * Last Edit: 6/10/24
- * Added getName() method for easier tracking of categories of sprites
+ * Last Edit: 5/8/25
+ * Updated to Java version
  */
 
-public class Sprite {
+
+import processing.core.PApplet;
+import processing.core.PImage;
+
+public class Sprite{
+
+  public PApplet p;
   
   //------------------ SPRITE FIELDS --------------------//
-  PImage spriteImg;
+  private PImage spriteImg;
   private String spriteImgFile;
   private String name;
   private float centerX;
@@ -24,47 +30,70 @@ public class Sprite {
   //------------------ SPRITE CONSTRUCTORS --------------------//
 
   // Sprite Constructor #1: Only pass in the image file (Non-animated)
-  public Sprite(String spriteImgFile){
-    this(spriteImgFile, 1.0, 0.0, 0.0, false);
+  public Sprite(PApplet p, String spriteImgFile){
+    this(p, spriteImgFile, 1.0f, 0.0f, 0.0f, false);
   }
 
   // Sprite Constructor #2: Only pass in the image file that can be scaled (Non-animated)
-  public Sprite(String spriteImgFile, float scale){
-    this(spriteImgFile, scale, 0.0, 0.0, false);
+  public Sprite(PApplet p, String spriteImgFile, float scale){
+    this(p, spriteImgFile, scale, 0.0f, 0.0f, false);
   }
 
-  // Sprite Constructor #3: for Non-Animated Sprite
-  public Sprite(String spriteImgFile, float scale, float x, float y) {
-    this(spriteImgFile, scale, x, y, false);
+  // Sprite Constructor #3: for Non-Animated Sprite (not working)
+  public Sprite(PApplet p,String spriteImgFile, float scale, float x, float y) {
+    this(p, spriteImgFile, scale, x, y, false);
   }
 
-  // Sprite Constructor #4: for ANY Sprite
-  public Sprite(String spriteImgFile, float scale, float x, float y, boolean isAnimated) {
+  // Sprite Constructor #4: for ANY Sprite from a file name
+  public Sprite(PApplet p, String spriteImgFile, float scale, float x, float y, boolean isAnimated) {
+
+    System.out.println("Sprite: Loading new Sprite " + spriteImgFile + " which is animated? " + isAnimated);
+    this.p = p;
     this.spriteImgFile = spriteImgFile;
+
+    if(!isAnimated){
+      if( spriteImgFile != null){
+        this.spriteImg = p.loadImage(spriteImgFile);
+        w = spriteImg.width * scale;
+        h = spriteImg.height * scale;
+      } else {
+
+      }
+    }
+
     setLeft(x);
     setTop(y);
     this.speedX = 0;
     this.speedY = 0;
     this.isAnimated = isAnimated;
-    if(!isAnimated){
-      if( spriteImgFile != null){
-        this.spriteImg = loadImage(spriteImgFile);
-        w = spriteImg.width * scale;
-        h = spriteImg.height * scale;
-      } else{
-        
-      }
 
-    }
+    // System.out.println("---->Sprite Class 69: "+ Game.toStringPImage(spriteImg));
+
   }
 
+  // Sprite Constructor #5: Input a PImage directly, Used for moveable Sprites
+  public Sprite(PApplet p, PImage spriteImg, float scale, float x, float y) {
+
+    System.out.println("Sprite: Loading new moveable Sprite!");
+    this.p = p;
+    this.spriteImg = spriteImg;
+    this.w = spriteImg.width * scale;
+    this.h = spriteImg.height * scale;
+    setLeft(x);
+    setTop(y);
+    this.speedX = 0;
+    this.speedY = 0;
+    this.isAnimated = false;
+
+  }
 
 
   //------------------ SPRITE MOTION METHODS --------------------//
 
   // method to display the Sprite image on the screen
   public void show() {
-      image(spriteImg, getLeft(), getTop(), w, h);
+    // System.out.println("spriteshow\t" + spriteImg);
+    p.image(spriteImg, getLeft(), getTop(), w, h);
   }
 
   // method to move Sprite image on the screen to a specific coordinate
@@ -89,8 +118,8 @@ public class Sprite {
 
   // method to rotate Sprite image on the screen
   public void rotate(float degrees){
-    float rads = radians(degrees);
-    translate(centerX,centerY);
+    float rads = p.radians(degrees);
+    p.translate(centerX,centerY);
     rotate(rads);
   }
 
@@ -203,7 +232,7 @@ public class Sprite {
   //Method to copy a Sprite to a specific location
   public Sprite copyTo(float x, float y){
 
-    PImage si = this.spriteImg;
+    // PImage si = this.spriteImg;
     String sif = this.spriteImgFile;
     float cx = this.centerX;
     float cy = this.centerY;
@@ -213,7 +242,7 @@ public class Sprite {
     float h = this.h;
     boolean ia = this.isAnimated;
     
-    Sprite sp = new Sprite(sif, 1.0, x, y, ia);
+    Sprite sp = new Sprite(p, sif, 1.0f, cx, cy, ia);
     sp.setSpeed(sx,sy);
     sp.setW(w);
     sp.setH(h);
@@ -252,8 +281,7 @@ public class Sprite {
   }
 
   public String toString(){
-    return spriteImgFile + "\t" + getLeft() + "\t" + getTop() + "\t" + speedX + "\t" + speedY + "\t" + w + "\t" + h + "\t" + isAnimated;
+    return "Sprite: fn: "+ spriteImgFile + "\tx:" + centerX + "\ty:" + centerY + "\tL:" + getLeft() + "\tT:" + getTop() + "\tVx:" + speedX + "\tVy:" + speedY + "\tw:" + w + "\th:" + h + "\t" + isAnimated;
   }
-
 
 }

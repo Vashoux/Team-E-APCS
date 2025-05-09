@@ -1,9 +1,11 @@
 /* Input class - to have popup boxes for users to type data
  * Forked from North Toronto Collegiate Institute, Gerry Heffernan: https://ntci.on.ca/compsci/hef/ics3/ch1/1_4.html
  * Authors: Joel Bianchi
- * Last Edit: 6/15/24
+ * Last Edit: 5/8/25
+ * Updated to Java version
  */
- 
+
+
 import javax.swing.*;
 
 

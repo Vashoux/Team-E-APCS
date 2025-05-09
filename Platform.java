@@ -3,13 +3,21 @@
  * Can be used with the following tutorials:
  * https://longbaonguyen.github.io/courses/platformer/platformer.html
  * Authors: __________________
- * Last Edit: 5/17/2023
+ * Last Edit: 5/8/25
+ * Updated to Java version
  */
+
+
+import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Platform {//extends Sprite {
 
+    PApplet p;
+
 	//Platform defined by it's center-x and top-Y positions
-	public Platform(float posXCenter, float posYTop, float platWidth, float platHeight, color clr) {
+	public Platform(PApplet p, float posXCenter, float posYTop, float platWidth, float platHeight, int color) {
+		this.p = p;
 
 		//pass along the center-x and center-y to Sprite super
 		//super(posXCenter, posYTop + (platHeight/2), clr);
@@ -19,9 +27,9 @@ public class Platform {//extends Sprite {
 		//setColor(Color.black);
 	}
 
-	public Platform(float posXCenter, float posYTop, float platWidth, float platHeight) {
+	public Platform(PApplet p, float posXCenter, float posYTop, float platWidth, float platHeight) {
 		//pass along the center-x and center-y to Sprite super
-		this(posXCenter, posYTop, platWidth, platHeight, color(0,0,0));
+		this(p, posXCenter, posYTop, platWidth, platHeight, 0x000000); // #000000
 	}
 
 }

@@ -3,23 +3,31 @@
  * https://github.com/CSRessel/catan/blob/master/src/gui/CatanBoard.java
  * Adapted for Processing
  * Authors: Joel Bianchi, Naomi Gaylor, Ezzeldin Moussa
- * Last Edit: 5/17/2024
+ * Last Edit: 5/8/25
+ * Updated to Java version
  * NOT FULLY FUNCTIONAL YET
  */
+ 
 
 import java.awt.Polygon;
 import java.awt.Point;
 import java.util.ArrayList;
+import processing.core.PApplet;
+import processing.core.PImage;
+import processing.core.PGraphics;
+
 
 public class HexGrid {
+
+	PApplet p;
 
 	ArrayList<HexLocation> allHexLocations;
 	ArrayList<HexLocation> unclaimedLocations;
 	
     private HexTile[][] map;
-    private color defaultOutlineColor = #FFFFFF;	//WHITE
-    private color defaultFillColor = #000000; 		//BLACK
-	private color defaultBgColor = color(164,200,218);
+    private int defaultOutlineColor = 0xFFFFFF; // #FFFFFF;	//WHITE
+    private int defaultFillColor = 0x000000; // #000000; 		//BLACK
+	private int defaultBgColor = Color.getColor(164,200,218);
 	
 	private boolean bgSet = false;
 
@@ -33,7 +41,9 @@ public class HexGrid {
 	private final double sqrt3div2 = 0.86602540378;
 
     //HexGrid Constructor #1
-    public HexGrid(int hexGen){
+    public HexGrid(PApplet p, int hexGen){
+
+		this.p = p;
 
 		this.hexGen = hexGen;
 
@@ -71,7 +81,7 @@ public class HexGrid {
 		for(HexLocation loc: allHexLocations){
 
 			//Generate hexTiles for each HexLocation
-			HexTile hTile = new HexTile(loc, this.hexDiameter);
+			HexTile hTile = new HexTile(p, loc, this.hexDiameter);
 			map[loc.getYCoord()][loc.getXCoord()] = hTile;
 			hTile.setColor(defaultFillColor);
 			hTile.setOutlineColor(defaultOutlineColor);
@@ -84,8 +94,8 @@ public class HexGrid {
     }
 
 	//HexGrid Constructor #2: defaults to 5
-    public HexGrid(){
-		this(5);
+    public HexGrid(PApplet p){
+		this(p, 5);
 	}
 
 	//Checks if a specific HexLocation is unclaimed
@@ -150,7 +160,7 @@ public class HexGrid {
         int mapHeight = map.length;
         //int hexagonSide = 50;
 		//int hexagonSide = (mapHeight - 2 * heightMargin) / 8;
-        int widthMargin = (width - (int) (10 * hexagonSide * sqrt3div2)) / 2;
+        int widthMargin = (p.width - (int) (10 * hexagonSide * sqrt3div2)) / 2;
 
         // Graphics2D g2 = (Graphics2D)g;
         // g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -201,7 +211,7 @@ public class HexGrid {
 		
         //FILL IN SOLID COLOR - fill in hexTile with a solid color if no picture
         if(!hasImage){
-			color fillClr = hTile.getColor();
+			int fillColor = hTile.getColor();
 			
 			// ???
 
@@ -218,7 +228,7 @@ public class HexGrid {
 
 				//mask the image to the hex shape
 				PGraphics maskImage;
-				maskImage = createGraphics(iSize,iSize);
+				maskImage = p.createGraphics(iSize,iSize);
 				maskImage.beginDraw();
 				//maskImage.triangle(30, 480, 256, 30, 480, 480);
 				//maskImage = drawOneHex(PGraphics maskImage);
@@ -228,7 +238,7 @@ public class HexGrid {
 				photo.mask(maskImage);
 
 				//display masked image
-				image(photo, 0, 0);
+				p.image(photo, 0, 0);
 
 				final int ix = getImageX(hTile, photo);
 				final int iy = getImageY(hTile, photo);
@@ -247,11 +257,11 @@ public class HexGrid {
 
 	//method to draw the outline around a hex tile
     public void outlineOneHex(HexTile hTile){
-		color oClr = hTile.defaultOutlineColor;
-		float stroke = 3.0;
-		color tileOutlineColor = hTile.getOutlineColor();
+		int outlineColor = hTile.defaultOutlineColor;
+		float stroke = 3.0f;
+		int tileOutlineColor = hTile.getOutlineColor();
 		
-		if(tileOutlineColor != oClr){
+		if(tileOutlineColor != outlineColor){
 			PGraphics pg = getHexPGraphics(hTile);
 
 			//DRAW THE OUTLINE!???
@@ -302,7 +312,7 @@ public class HexGrid {
     //MUTATOR METHODS
 
 	//Fill in entire hexGrid with specified tileColor
-    public void setAllTileColors(color tileColor){
+    public void setAllTileColors(int tileColor){
         this.defaultFillColor = tileColor;
           for (int r = 0; r < map.length; r++) {
             for (int c = 0; c < map[0].length; c++) {
@@ -314,7 +324,7 @@ public class HexGrid {
     }
 
 	//Outlines all hexTiles with specified outlineColor
-	public void setAllTileOutlines(color outlineColor){
+	public void setAllTileOutlines(int outlineColor){
         this.defaultFillColor = outlineColor;
           for (int r = 0; r < map.length; r++) {
             for (int c = 0; c < map[0].length; c++) {
@@ -334,16 +344,16 @@ public class HexGrid {
     }
 
 	//method to access the color of specified loc
-    public color getTileColor(HexLocation loc){
+    public int getTileColor(HexLocation loc){
 		HexTile hTile = getHexTile(loc);
-        color oldColor = hTile.getColor();
+        int oldColor = hTile.getColor();
         return oldColor;
     }
 
 	//method to change the color of specified loc, returns the previous color
-    public color setTileColor(HexLocation loc, color tileColor){
+    public int setTileColor(HexLocation loc, int tileColor){
 		HexTile hTile = getHexTile(loc);
-        color oldColor = hTile.getColor();
+        int oldColor = hTile.getColor();
         hTile.setColor(tileColor);
         return oldColor;
     }
@@ -351,7 +361,7 @@ public class HexGrid {
 	//method to highlight to a tile to BLACK
 	public void highlightTile(HexLocation loc) {
 		HexTile hTile = getHexTile(loc);
-		color highlightColor = #FFFFFF;
+		int highlightColor = 0xFFFFFF; // #FFFFFF;
 
 		Point p = hTile.getCenterPixels();
 
@@ -382,11 +392,12 @@ public class HexGrid {
 	}
 
     //needs to be modified slightly because HexGrid doesn't include ALL tiles in the rectangle (like 0,0)
-	// public boolean isValid(final HexLocation loc) {
-	// 	final int row = loc.getYCoord();
-	// 	final int col = loc.getXCoord();
-	// 	return 0 <= row && row < getNumRows() && 0 <= col && col < getNumCols();
-	// }
+	public boolean isValid(final HexLocation loc) {
+		// final int row = loc.getYCoord();
+		// final int col = loc.getXCoord();
+		// return 0 <= row && row < getNumRows() && 0 <= col && col < getNumCols();
+		return true;
+	}
 
 
     /* ---------------- BACKGROUND IMAGE METHODS ------------------------- */
@@ -421,14 +432,14 @@ public class HexGrid {
 
 
 
-	public void setFillColor(final HexLocation loc, final color clr) {
+	public void setFillColor(final HexLocation loc, final int color) {
 		if (!isValid(loc))
-			throw new RuntimeException("cannot set color of invalid location " + loc + " to color " + clr);
-		map[loc.getXCoord()][loc.getYCoord()].setColor(clr);
+			throw new RuntimeException("cannot set color of invalid location " + loc + " to color " + color);
+		map[loc.getXCoord()][loc.getYCoord()].setColor(color);
 		//repaint();
 	}
 
-	public color getFillColor(final HexLocation loc) {
+	public int getFillColor(final HexLocation loc) {
 		if (!isValid(loc))
 			throw new RuntimeException("cannot get color from invalid location " + loc);
 		return map[loc.getYCoord()][loc.getXCoord()].getColor();
@@ -448,23 +459,23 @@ public class HexGrid {
 	// 	return map[loc.getYCoord()][loc.getXCoord()].getImageFileName();
 	// }
 
-	public void setTileOutlineColor(final HexLocation loc, final color clr) {
+	public void setTileOutlineColor(final HexLocation loc, final int color) {
 		if (!isValid(loc))
 			throw new RuntimeException("cannot set outline for invalid location " + loc);
-            map[loc.getXCoord()][loc.getYCoord()].setOutlineColor(clr);
+            map[loc.getXCoord()][loc.getYCoord()].setOutlineColor(color);
 		//repaint();
 	}
 
-	public color getTileOutlineColor(final HexLocation loc) {
+	public int getTileOutlineColor(final HexLocation loc) {
 		if (!isValid(loc))
 			throw new RuntimeException("cannot get outline color for invalid location " + loc);
 		return map[loc.getXCoord()][loc.getYCoord()].getOutlineColor();
 	}
 
-	public void setAllOutlinesColor(final color oclr) {
+	public void setAllOutlinesColor(final int outlineColor) {
 		for (int r = 0; r < getNumRows(); r++) {
 			for (int c = 0; c < getNumCols(); c++) {
-				map[r][c].setOutlineColor(oclr);
+				map[r][c].setOutlineColor(outlineColor);
 			}
 		}
 		//repaint();
@@ -650,15 +661,15 @@ public class HexGrid {
 		int npoints = 6;
 		float x = hTile.getCenterPixels().x;
 		float y = hTile.getCenterPixels().y;
-		float angle = TWO_PI / npoints;
+		float angle = p.TWO_PI / npoints;
 		float radius = hTile.getRadius();
-		beginShape();
-		for (float a = 0; a < TWO_PI; a += angle) {
-			float sx = x + cos(a) * radius;
-			float sy = y + sin(a) * radius;
-			vertex(sx, sy);
+		p.beginShape();
+		for (float a = 0; a < p.TWO_PI; a += angle) {
+			float sx = x + p.cos(a) * radius;
+			float sy = y + p.sin(a) * radius;
+			p.vertex(sx, sy);
 		}
-		endShape(CLOSE);
+		p.endShape(p.CLOSE);
 	}
 
 

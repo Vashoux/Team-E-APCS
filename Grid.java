@@ -2,9 +2,13 @@
  * A 2D array of GridTiles which can be marked
  * Subclass of World that can show all Images & Sprites
  * Author: Joel Bianchi & RJ Morel
- * Last Edit: 6/11/2024
- * setTileImage() does not show by default
+ * Last Edit: 5/8/25
+ * Updated to Java version
  */
+
+
+import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Grid extends World{
   
@@ -18,8 +22,8 @@ public class Grid extends World{
   //------------------ GRID CONSTRUCTORS --------------------//
 
   //Grid constructor #1
-  public Grid(String screenName, PImage bg, int rows, int cols){
-    super(screenName, bg);
+  public Grid(PApplet p, String screenName, PImage bg, int rows, int cols){
+    super(p, screenName, bg);
 
     this.rows = rows;
     this.cols = cols;
@@ -27,19 +31,19 @@ public class Grid extends World{
     
     for(int r=0; r<rows; r++){
       for(int c=0; c<cols; c++){
-        board[r][c] = new GridTile(new GridLocation(r,c));
+        board[r][c] = new GridTile(p, new GridLocation(r,c));
       }
     }
   }
 
   //Grid Construtor #2: Only accepts the number of rows & columns (Default for 2023)
-  public Grid(int rows, int cols){
-    this("grid",null, rows, cols);
+  public Grid(PApplet p, int rows, int cols){
+    this(p, "grid",null, rows, cols);
   }
 
   // Grid Constructor #3: Default constructor that creates a 3x3 Grid  
-  public Grid(){
-     this(3,3);
+  public Grid(PApplet p){
+     this(p, 3,3);
   }
 
 
@@ -110,15 +114,15 @@ public class Grid extends World{
   //Method that returns the GridLocation of where the mouse is currently hovering over
   public GridLocation getGridLocation(){
       
-    int row = mouseY/(pixelHeight/this.rows);
-    int col = mouseX/(pixelWidth/this.cols);
+    int row = p.mouseY/(p.pixelHeight/this.rows);
+    int col = p.mouseX/(p.pixelWidth/this.cols);
 
     return new GridLocation(row, col);
   } 
 
   //Accessor method that provide the x-pixel value given a GridLocation loc
   public int getX(GridLocation loc){
-    int widthOfOneTile = pixelWidth/this.cols;
+    int widthOfOneTile = p.pixelWidth/this.cols;
     //calculate the left of the grid GridLocation
     int pixelX = (widthOfOneTile * loc.getCol()); 
     return pixelX;
@@ -132,7 +136,7 @@ public class Grid extends World{
   
   //Accessor method that provide the y-pixel value given a GridLocation loc
   public int getY(GridLocation loc){
-    int heightOfOneTile = pixelHeight/this.rows;
+    int heightOfOneTile = p.pixelHeight/this.rows;
     //calculate the top of the grid GridLocation
     int pixelY = (heightOfOneTile * loc.getRow()); 
     return pixelY;
@@ -156,11 +160,11 @@ public class Grid extends World{
 
   //Accessor method that returns the width of 1 Tile in the Grid
   public int getTileWidth(){
-    return pixelWidth/this.cols;
+    return p.pixelWidth/this.cols;
   }
   //Accessor method that returns the height of 1 Tile in the Grid
   public int getTileHeight(){
-    return pixelHeight/this.rows;
+    return p.pixelHeight/this.rows;
   }
 
   //Returns the GridTile object stored at a specified GridLocation
@@ -204,7 +208,7 @@ public class Grid extends World{
   public void showTileImage(GridLocation loc){
     GridTile tile = getTile(loc);
     if(tile.hasImage()){
-      image(tile.getImage(),getX(loc),getY(loc));
+      p.image(tile.getImage(),getX(loc),getY(loc));
     }
   }
 

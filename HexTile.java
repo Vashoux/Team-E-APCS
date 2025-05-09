@@ -1,11 +1,15 @@
 /* HexTile Class
  * Based off code from Naomi Gaylor & Ezzeldin Moussa, June 2022
- * Last edit: 5/17/2024
- * Edited to be a subclass of GridTile pde file
+ * Last Edit: 5/8/25
+ * Updated to Java version
  */
 
+
+import processing.core.PApplet;
+import processing.core.PImage;
 import java.awt.Polygon;
 import java.awt.Point;
+
 
 public class HexTile extends GridTile{
   
@@ -16,20 +20,18 @@ public class HexTile extends GridTile{
 
 
   //HexTile Constructor #1: X,Y coordinates
-  public HexTile(int xCoord, int yCoord, float rad){
-    this(new HexLocation(xCoord,yCoord), rad);
+  public HexTile(PApplet p, int xCoord, int yCoord, float rad){
+    this(p, new HexLocation(xCoord,yCoord), rad);
   }
 
   //HexTile Constructor #2: GridLocation
-  public HexTile(HexLocation loc, float rad){
-    super(loc);
+  public HexTile(PApplet p, HexLocation loc, float rad){
+    super(p, loc);
     //this.hexLoc = loc;
     this.radius = rad;
     this.centerPixels = new Point(0,0);
     this.hexPoly = null;
   }
-
-
 
   //method to access the location of the GridTile
   // public HexLocation getLocation(){

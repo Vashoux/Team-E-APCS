@@ -129,6 +129,7 @@ public class Screen{
         if(isMoveable){
             mbg.show();
         } else if(bg != null){
+            System.out.println(bg);
             p.background(bg);
         }
     }

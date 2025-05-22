@@ -101,11 +101,11 @@ public class Game extends PApplet{
 
     //SETUP: Load BG images used in all screens
     splashBg = p.loadImage(splashBgFile);
-    splashBg.resize(p.width, p.height);
+    //splashBg.resize(p.width, p.height);
     level1Bg = p.loadImage(level1BgFile);
     level1Bg.resize(p.width, p.height);
     level2Bg = p.loadImage(level2BgFile);
-    //level2Bg.resize(p.width, p.height);
+    level2Bg.resize(p.width, p.height);
     endBg = p.loadImage(endBgFile);
     endBg.resize(p.width, p.height);
 
@@ -120,6 +120,7 @@ public class Game extends PApplet{
     // level2World = new World("sky", level2Bg);   //non-moving World construtor
     endScreen = new World(p, "end", endBg);
     currentScreen = splashScreen;
+    // currentScreen = level1Grid;
 
     //SETUP: All Game objects
     runningHorse = new AnimatedSprite(p, "sprites/horse_run.png", "sprites/horse_run.json", 50.0f, 75.0f, 1.0f);

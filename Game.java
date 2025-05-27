@@ -20,7 +20,7 @@ public class Game extends PApplet{
   PApplet p;
 
   // VARIABLES: Title Bar
-  String titleText = "PeanutChessSkyHorse2";
+  String titleText = "Frontline Survivor";
   String extraText = "CurrentLevel?";
   String name = "";
 
@@ -31,7 +31,7 @@ public class Game extends PApplet{
   // VARIABLES: Splash Screen
   Screen splashScreen;
   PImage splashBg;
-  String splashBgFile = "images/apcsa.png";
+  String splashBgFile = "images/eascreen.png";
   //SoundFile song;
 
   // VARIABLES: Level1Grid Screen

@@ -1,12 +1,13 @@
 /**
  * Game Class - Primary game logic for a Java-based Processing Game
  * @author Joel A Bianchi
- * @version 5/29/25
- * Added example for using grid method setAllMarks()
+ * @version 6/12/25
+ * No need to create PImage for bg
  */
 
 //import processing.sound.*;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 
 
@@ -29,14 +30,12 @@ public class Game extends PApplet{
 
   // VARIABLES: splashScreen
   Screen splashScreen;
-  PImage splashBg;
   String splashBgFile = "images/eascreen.png";
   //SoundFile song;
 
 
   // VARIABLES: skyWorld Screen (characters move by pixels)
   World skyWorld;
-  PImage skyWorldBg;
   String skyWorldBgFile = "images/sky.png";
   AnimatedSprite chick;
   String chickFile = "sprites/chick_walk.png";
@@ -48,7 +47,6 @@ public class Game extends PApplet{
 
   // VARIABLES: endScreen
   World endScreen;
-  PImage endBg;
   String endBgFile = "images/youwin.png";
 
   // VARIABLES: Tracking the current Screen being displayed
@@ -73,25 +71,14 @@ public class Game extends PApplet{
   //Required Processing method that gets run once
   public void setup() {
 
-    p.imageMode(p.CORNER);    //Set Images to read coordinates at corners
-    //fullScreen();   //only use if not using a specfic bg image
-    
     //SETUP: Set the title on the title bar
     surface.setTitle(titleText);
-
-    //SETUP: Load BG images used in all screens
-    splashBg = p.loadImage(splashBgFile);
-    skyWorldBg = p.loadImage(skyWorldBgFile);
-    endBg = p.loadImage(endBgFile);
-
-    //SETUP: If non-moving, Resize all BG images to exactly match the screen size
-    splashBg.resize(p.width, p.height);
-    endBg.resize(p.width, p.height);   
+    p.imageMode(PConstants.CORNER);    //Set Images to read coordinates at corners
 
     //SETUP: Construct each Screen, World, Grid
-    splashScreen = new Screen(p, "splash", splashBg);
+    splashScreen = new Screen(p, "splash", splashBgFile);
     skyWorld = new World(p, "sky", skyWorldBgFile, 4.0f, 0.0f, -800.0f); //moveable World constructor
-    endScreen = new World(p, "end", endBg);
+    endScreen = new World(p, "end", endBgFile);
     currentScreen = splashScreen;
     // currentScreen = level1Grid;
 

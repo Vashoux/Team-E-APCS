@@ -83,6 +83,7 @@ public class Game extends PApplet{
     splashBg = p.loadImage(splashBgFile);
     skyWorldBg = p.loadImage(skyWorldBgFile);
     endBg = p.loadImage(endBgFile);
+    skylineBg = p.loadImage(skylineBg);
 
     //SETUP: If non-moving, Resize all BG images to exactly match the screen size
     splashBg.resize(p.width, p.height);
@@ -105,7 +106,7 @@ public class Game extends PApplet{
     zapdos.moveTo(zapdosStartX, zapdosStartY);
     skyWorld.addSprite(zapdos);
     skyWorld.addSpriteCopyTo(runningHorse, 100, 200);  //example Sprite added to a World at a location, with a speed
-    skyWorld.printWorldSprites();
+    skyWorld.printWorldSprites();vb
     System.out.println("Done loading Level 2 (skyWorld)...");
 
 
@@ -254,6 +255,12 @@ public class Game extends PApplet{
 
       // Set speed of moving skyWorld background
       skyWorld.moveBgXY(-0.3f, 0f);
+
+      // if(object.isOverLapping(objects)){
+      // health = -1:
+      // object.setSpeed(speedX:0, speedY:0);
+      //articuno.setSpeed(speedX:10,speedY:0)
+      //}
 
     }
 
